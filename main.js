@@ -117,7 +117,7 @@ downloadBtn.addEventListener('click', () => {
     document.body.removeChild(link);
 });
 
-// Écouteur pour le bouton sauvegarder séparé
+// Écouteur pour le bouton sauvegarder
 saveBtn.addEventListener('click', () => {
     if (!image) {
         alert("Veuillez d'abord sélectionner une image");
@@ -160,6 +160,15 @@ function downloadSavedMeme(dataUrl, index) {
     document.body.removeChild(link);
 }
 
+// Fonction pour vider toute la galerie
+function clearGallery() {
+    if (confirm('Êtes-vous sûr de vouloir supprimer tous les memes sauvegardés ?')) {
+        savedMemes = [];
+        saveMemeToStorage();
+        updateGalerie();
+    }
+}
+
 // Fonction pour mettre à jour la galerie
 function updateGalerie() {
     const galerieContainer = document.getElementById('galerieContainer');
@@ -183,6 +192,10 @@ function updateGalerie() {
                         style="background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
                     Télécharger
                 </button>
+                <button onclick="shareMeme('${meme.dataUrl}', '${meme.topText || ''}', '${meme.bottomText || ''}')" 
+                        style="background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
+                    Partager
+                </button>
                 <button onclick="deleteMeme(${meme.id})" 
                         style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
                     Supprimer
@@ -191,6 +204,44 @@ function updateGalerie() {
         `;
         galerieContainer.appendChild(memeItem);
     });
+}
+
+// Fonction pour partager un meme
+function shareMeme(dataUrl, topText, bottomText) {
+    // Vérifie si l'API Web Share est disponible (mobile surtout)
+    if (navigator.share) {
+        // Convertit l'URL data en blob pour le partage
+        fetch(dataUrl)
+            .then(res => res.blob())
+            .then(blob => {
+                const file = new File([blob], "meme.png", { type: "image/png" });
+                
+                navigator.share({
+                    title: "Mon Meme Créé",
+                    text: `${topText ? `Haut: ${topText}` : ''} ${bottomText ? `Bas: ${bottomText}` : ''}`,
+                    files: [file]
+                }).catch(err => {
+                    console.error("Erreur de partage:", err);
+                    fallbackShare(dataUrl);
+                });
+            });
+    } else {
+        // Fallback pour les navigateurs sans Web Share API
+        fallbackShare(dataUrl);
+    }
+}
+
+// Solution de repli pour le partage
+function fallbackShare(dataUrl) {
+    // Crée un élément textarea temporaire pour copier le lien
+    const tempInput = document.createElement('textarea');
+    tempInput.value = "Regarde mon meme ! " + dataUrl;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand('copy');
+    document.body.removeChild(tempInput);
+    
+    alert("Lien du meme copié dans le presse-papiers ! Collez-le dans vos messages.");
 }
 
 // Gestion des menus de navigation
@@ -221,3 +272,4 @@ document.addEventListener('DOMContentLoaded', () => {
     updateGalerie();
     
 });
+
