@@ -417,14 +417,21 @@
             }
         }
         
-        /* Optimisations pour les écrans haute densité */
-        @media screen and (-webkit-min-device-pixel-ratio: 2),
-               screen and (min-resolution: 192dpi) {
-            .header h1 {
-                text-shadow: 1px 1px 2px rgba(27, 48, 213, 0.3);
-            }
-            
-            .meme-generator, .galerie {
-                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            }
+       .social-share {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+        }
+        
+        .social-icon{
+            display: block;
+            width: 30px;
+            height: 30px;
+            padding: 3%;
+        }
+        
+        .social-icon img {
+            object-fit: contain;
+            width: 100%;
+            height: 100%;
         }
