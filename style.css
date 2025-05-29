@@ -39,28 +39,31 @@
             margin-bottom: 20px;
             margin: 0 10px 20px 10px;
         }
-        
-        .menu-button {
-            flex: 1;
-            text-align: center;
-            padding: 15px 10px;
-            cursor: pointer;
-            font-weight: bold;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s;
-            border: none;
-            background: #f8f9fa;
-            font-size: clamp(0.9em, 2.5vw, 1em);
-        }
-        
-        .menu-button.active {
-            background-color: #ffffff;
-            color: rgb(25, 118, 155);
-        }
-        
-        .menu-button:hover {
-            background-color: #e9ecef;
-        }
+
+        .menus{
+           display: flex;
+       }
+
+       .menu-button {
+           flex: 1;
+           text-align: center;
+           padding: 15px 0;
+           cursor: pointer;
+           font-weight: bold;
+           color: #333;
+           transition: background-color 0.3s, color 0.3s;
+           border: none;
+           background: #f8f9fa;
+       }
+       
+       .menu-button.active {
+           background-color: #ffffff;
+           color: rgb(25, 118, 155);
+       }
+       
+       .menu-button:hover {
+           background-color: #e9ecef;
+       }
         
         .meme-generator {
             max-width: 100%;
