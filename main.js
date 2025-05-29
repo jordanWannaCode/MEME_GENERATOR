@@ -160,6 +160,34 @@ function downloadSavedMeme(dataUrl, index) {
     document.body.removeChild(link);
 }
 
+//Fonction pour partager sur les reseaux
+shareBtn.addEventListener('click', () => {
+    if (!image) {
+        alert("Veuillez d'abord créer un meme");
+        return;
+    }
+
+    // Convertir le canvas en image
+    const dataUrl = canvas.toDataURL('image/png');
+    
+    // Créer un lien de partage temporaire
+    const shareLink = document.createElement('a');
+    shareLink.href = dataUrl;
+    shareLink.target = '_blank';
+    
+    // Selon le dispositif, on adapte le comportement
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Sur mobile: ouvre le menu de partage natif
+        shareLink.download = 'mon-meme.png';
+        shareLink.click();
+    } else {
+        // Sur desktop: télécharge directement
+        shareLink.download = 'mon-meme.png';
+        shareLink.click();
+        alert("Image téléchargée. Partagez-la depuis votre galerie!");
+    }
+});
+
 // Fonction pour vider toute la galerie
 function clearGallery() {
     if (confirm('Êtes-vous sûr de vouloir supprimer tous les memes sauvegardés ?')) {
