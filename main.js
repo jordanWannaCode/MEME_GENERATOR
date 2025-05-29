@@ -160,15 +160,6 @@ function downloadSavedMeme(dataUrl, index) {
     document.body.removeChild(link);
 }
 
-// Fonction pour vider toute la galerie
-function clearGallery() {
-    if (confirm('Êtes-vous sûr de vouloir supprimer tous les memes sauvegardés ?')) {
-        savedMemes = [];
-        saveMemeToStorage();
-        updateGalerie();
-    }
-}
-
 // Fonction pour mettre à jour la galerie
 function updateGalerie() {
     const galerieContainer = document.getElementById('galerieContainer');
