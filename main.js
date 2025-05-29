@@ -225,6 +225,10 @@ function updateGalerie() {
                         style="background: #28a745; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
                     Télécharger
                 </button>
+                <button onclick="shareMeme('${meme.dataUrl}')" 
+                        style="background: #007bff; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
+                    Partager
+                </button>
                 <button onclick="deleteMeme(${meme.id})" 
                         style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 12px;">
                     Supprimer
@@ -233,6 +237,35 @@ function updateGalerie() {
         `;
         galerieContainer.appendChild(memeItem);
     });
+}
+
+async function shareMeme(dataUrl) {
+    try {
+        // Convertir dataURL en blob
+        const response = await fetch(dataUrl);
+        const blob = await response.blob();
+        const file = new File([blob], 'meme.png', { type: 'image/png' });
+
+        if (navigator.share) {
+            await navigator.share({
+                title: 'Mon Meme Génial',
+                text: 'Regardez ce meme que j\'ai créé!',
+                files: [file]
+            });
+        } else {
+            // Fallback pour les navigateurs sans support de l'API Share
+            const link = document.createElement('a');
+            link.download = 'meme.png';
+            link.href = dataUrl;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            alert("L'image a été téléchargée. Vous pouvez la partager depuis votre galerie!");
+        }
+    } catch (error) {
+        console.error('Erreur de partage:', error);
+        alert("Une erreur est survenue lors du partage.");
+    }
 }
 
 // Gestion des menus de navigation
