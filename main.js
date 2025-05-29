@@ -160,41 +160,46 @@ function downloadSavedMeme(dataUrl, index) {
     document.body.removeChild(link);
 }
 
-//Fonction pour partager sur les reseaux
-shareBtn.addEventListener('click', () => {
+// Fonction pour partager sur les réseaux
+shareBtn.addEventListener('click', async () => {
     if (!image) {
         alert("Veuillez d'abord créer un meme");
         return;
     }
 
-    // Convertir le canvas en image
-    const dataUrl = canvas.toDataURL('image/png');
-    
-    // Créer un lien de partage temporaire
-    const shareLink = document.createElement('a');
-    shareLink.href = dataUrl;
-    shareLink.target = '_blank';
-    
-    // Selon le dispositif, on adapte le comportement
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Sur mobile: ouvre le menu de partage natif
-        shareLink.download = 'mon-meme.png';
-        shareLink.click();
-    } else {
-        // Sur desktop: télécharge directement
-        shareLink.download = 'mon-meme.png';
-        shareLink.click();
-        alert("Image téléchargée. Partagez-la depuis votre galerie!");
-    }
+    // Convertir le canvas en blob
+    canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'mon-meme.png', { type: 'image/png' });
+        
+        // Vérifier si l'API Web Share est disponible
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Mon Meme Génial',
+                    text: 'Regardez ce meme que j\'ai créé!',
+                    files: [file]
+                });
+            } catch (error) {
+                console.error('Erreur de partage:', error);
+                // Fallback si le partage échoue
+                downloadMemeAsFallback();
+            }
+        } else {
+            // Fallback pour les navigateurs qui ne supportent pas l'API Web Share
+            downloadMemeAsFallback();
+        }
+    }, 'image/png');
 });
 
-// Fonction pour vider toute la galerie
-function clearGallery() {
-    if (confirm('Êtes-vous sûr de vouloir supprimer tous les memes sauvegardés ?')) {
-        savedMemes = [];
-        saveMemeToStorage();
-        updateGalerie();
-    }
+// Fallback pour le téléchargement
+function downloadMemeAsFallback() {
+    const link = document.createElement('a');
+    link.download = 'mon-meme.png';
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    alert("L'image a été téléchargée. Vous pouvez la partager depuis votre galerie!");
 }
 
 // Fonction pour mettre à jour la galerie
