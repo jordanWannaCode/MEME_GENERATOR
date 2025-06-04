@@ -28,7 +28,7 @@ Ce projet est un générateur de mèmes en ligne qui permet aux utilisateurs de 
 
 - HTML5
 - CSS3
-- JavaScript (vanilla)
+- JavaScript
 - Canvas API
 - Web Storage API (localStorage)
 - Web Share API (pour le partage)
