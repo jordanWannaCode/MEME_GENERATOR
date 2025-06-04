@@ -35,3 +35,6 @@ Ce projet est un générateur de mèmes en ligne qui permet aux utilisateurs de 
 
 
 **Note** : Ce projet utilise le stockage local du navigateur. Les mèmes sauvegardés ne seront disponibles que sur le même appareil et navigateur.
+
+Lien pour tester:
+https://jordanwannacode.github.io/MEME_GENERATOR/
