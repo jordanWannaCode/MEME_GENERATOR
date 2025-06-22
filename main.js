@@ -23,16 +23,6 @@ function loadSavedMemes() {
     }
 }
 
-// Sauvegarder les memes dans localStorage
-function saveMemeToStorage() {
-    try {
-        localStorage.setItem('savedMemes', JSON.stringify(savedMemes));
-    } catch (error) {
-        console.error('Erreur lors de la sauvegarde:', error);
-        alert('Erreur lors de la sauvegarde du meme');
-    }
-}
-
 // Écouteur pour le changement d'image
 imageFileInput.addEventListener("change", (e) => {
     if (e.target.files && e.target.files[0]) {
@@ -129,16 +119,25 @@ saveBtn.addEventListener('click', () => {
 
 // Fonction pour sauvegarder le meme dans la galerie
 function saveMemeToGallery() {
-    const memeData = {
-        id: Date.now(), // ID unique pour chaque meme
-        dataUrl: canvas.toDataURL('image/png'),
-        topText: topTextInput.value,
-        bottomText: bottomTextInput.value,
-        timestamp: new Date().toLocaleString()
-    };
-    savedMemes.push(memeData);
-    saveMemeToStorage(); 
-    updateGalerie();
+        if (savedMemes.length >= 20) {
+            alert("La galerie est pleine (max 20 memes). Supprimez-en avant d'en ajouter de nouveaux.");
+            return;
+        }
+        const memeData = {
+            id: Date.now(), // ID unique pour chaque meme
+            dataUrl: canvas.toDataURL('image/png'),
+            topText: topTextInput.value,
+            bottomText: bottomTextInput.value,
+            timestamp: new Date().toLocaleString()
+        };
+        savedMemes.push(memeData);
+        saveMemeToStorage(); 
+        updateGalerie();
+    }
+
+// Sauvegarder les memes dans localStorage
+function saveMemeToStorage() {
+    localStorage.setItem('savedMemes', JSON.stringify(savedMemes));
 }
 
 // Fonction pour supprimer un meme de la galerie
